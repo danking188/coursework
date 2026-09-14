@@ -1,15 +1,26 @@
-public static int[] average_grades(int grades[][], int weights[]) {
-        int numberOfStudents = grades.length;
-        int numberOfComponents = grades[0].length;
-        int[] weightedAverages = new int[numberOfStudents];
-
-        for (int i = 0; i < numberOfStudents; i++) {
-            int sum = 0;
-            for (int j = 0; j < numberOfComponents; j++) {
-                sum += grades[i][j] * weights[j];
-            }
-            weightedAverages[i] = sum / 100; // This will automatically round down to the nearest integer due to integer division
-        }
-
-        return weightedAverages;
+public static int[] average_grades(int[][] grades, int[] weights) {
+    if (grades == null || weights == null || weights.length == 0) {
+        throw new IllegalArgumentException("Grades and non-empty weights are required");
     }
+    long totalWeight = 0;
+    for (int weight : weights) {
+        if (weight < 0) throw new IllegalArgumentException("Weights must be non-negative");
+        totalWeight += weight;
+    }
+    if (totalWeight != 100) throw new IllegalArgumentException("Weights must sum to 100");
+    int[] averages = new int[grades.length];
+    for (int i = 0; i < grades.length; i++) {
+        if (grades[i] == null || grades[i].length != weights.length) {
+            throw new IllegalArgumentException("Each student must have one grade per weight");
+        }
+        long sum = 0;
+        for (int j = 0; j < weights.length; j++) {
+            if (grades[i][j] < 0 || grades[i][j] > 100) {
+                throw new IllegalArgumentException("Grades must be between 0 and 100");
+            }
+            sum += (long) grades[i][j] * weights[j];
+        }
+        averages[i] = (int) (sum / 100); // Non-negative integer division rounds down.
+    }
+    return averages;
+}

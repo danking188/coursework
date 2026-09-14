@@ -28,8 +28,8 @@
 
             // Iterate over each digit in the number
             for (int i = 0; i < maxLength; i++) {
-                int digit = Character.getNumericValue(numberStr.charAt(i));
-                lineBuilder.append(ssd(digit, line));
+                char digit = numberStr.charAt(i);
+                lineBuilder.append(digit == '-' ? (line == 3 ? " --  " : "     ") : ssd(digit - '0', line));
             }
 
             // Print the line
@@ -37,4 +37,3 @@
         }
     }
 
-  
